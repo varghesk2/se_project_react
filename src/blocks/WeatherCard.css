@@ -1,0 +1,32 @@
+.weather-card {
+  margin: 24px 0;
+}
+
+.weather-card__icon-img {
+  width: 48px;
+  height: 48px;
+}
+
+.weather-card__svg {
+  display: flex;
+  align-items: center;
+  margin-left: 16px;
+}
+
+.weather-card__content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  min-height: 56px;
+
+  background: #00f6ff;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.weather-card__temp {
+  font: 700 2rem "Cabinet Grotesk", Arial, sans-serif;
+  color: #fff;
+}
+

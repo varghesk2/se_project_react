@@ -1,0 +1,28 @@
+.item-card {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  width: 323px;
+  height: 326px;
+  padding: 16px 8px;
+  cursor: pointer;
+}
+
+.item-card__name {
+  position: absolute;
+  top: 15px;
+  width: 73px;
+  height: 24px;
+  margin: 0;
+
+  font: 700 1rem/20px "Cabinet Grotesk", Arial, sans-serif;
+  color: rgba(0, 0, 0, 0.6);
+  background-color: #fff;
+  text-align: center;
+}
+
+.item-card__img {
+  width: 100%;
+  border: 1px solid #0000004d;
+  border-radius: 16px;
+}

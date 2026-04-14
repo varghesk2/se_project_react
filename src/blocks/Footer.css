@@ -1,0 +1,8 @@
+.footer {
+  display: flex;
+  justify-content: space-between;
+}
+
+.footer__text {
+  font: 500 16px/24px "Cabinet Grotesk", Arial, sans-serif;
+}

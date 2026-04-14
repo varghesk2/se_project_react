@@ -1,0 +1,92 @@
+.modal-form {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #0000004d;
+  visibility: hidden;
+}
+
+.modal-form__content {
+  position: relative;
+  width: 496px;
+  padding: 28px 28px 36px;
+  background-color: #fff;
+  border-radius: 20px;
+}
+
+
+.modal-form__form {
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-form__label {
+  margin-top: 24px;
+}
+
+.modal-form__input {
+  width: 100%;
+  margin-top: 8px;
+  border: none;
+  border-bottom: 1px solid #000;
+}
+
+.modal-form_opened {
+  visibility: visible;
+}
+
+.modal-form__close {
+  position: absolute;
+  top: 20px;
+  right: 28px;
+  width: 20px;
+  height: 20px;
+  border: none;
+  background: #fff url("/src/images/close.png") no-repeat center;
+  cursor: pointer;
+}
+
+.modal-form__submit {
+  position: absolute;
+  bottom: 36px;
+  width: 124px;
+  height: 36px;
+  border: none;
+  border-radius: 4px;
+  background-color: #000;
+  color: #fff;
+  cursor: pointer;
+}
+
+.modal-form__submit:hover {
+  background-color: #00000099;
+}
+
+.modal-form__submit:disabled {
+  background-color: #0000004d;
+}
+
+.modal-form__label_type_radio {
+  margin: 0;
+  padding-top: 8px;
+  color: #00000080;
+}
+
+.modal-form__radio-input {
+  margin-right: 8px;
+}
+
+.modal-form__radio-buttons {
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+
+.modal-form__title,
+.modal-form__label,
+.modal-form__input,
+.modal-form__radio-buttons {
+  font: 700 16px/20px "Cabinet Grotesk", Arial, sans-serif;
+}
