@@ -1,3 +1,30 @@
-.main__text {
-  font: 700 20px/1 "Cabinet Grotesk", Arial, sans-serif;
+.main {
+  background: #ffffff;
+  padding: 25px;
+  border-radius: 14px;
+  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.08);
+}
+
+.weather {
+  background: linear-gradient(135deg, #4a90e2, #357ae8);
+  color: white;
+  padding: 20px;
+  border-radius: 12px;
+}
+
+.weather__temp {
+  font-size: 32px;
+  margin: 0;
+}
+
+.weather__info {
+  margin-top: 8px;
+  font-size: 16px;
+}
+
+.cards {
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 20px;
 }

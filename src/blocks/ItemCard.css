@@ -1,28 +1,25 @@
-.item-card {
-  position: relative;
-  display: flex;
-  justify-content: center;
-  width: 323px;
-  height: 326px;
-  padding: 16px 8px;
-  cursor: pointer;
-}
-
-.item-card__name {
-  position: absolute;
-  top: 15px;
-  width: 73px;
-  height: 24px;
-  margin: 0;
-
-  font: 700 1rem/20px "Cabinet Grotesk", Arial, sans-serif;
-  color: rgba(0, 0, 0, 0.6);
-  background-color: #fff;
+.card {
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid #e6e6e6;
+  padding: 12px;
   text-align: center;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.item-card__img {
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+}
+
+.card__image {
   width: 100%;
-  border: 1px solid #0000004d;
-  border-radius: 16px;
+  height: 140px;
+  object-fit: contain;
+}
+
+.card__name {
+  margin-top: 10px;
+  font-size: 14px;
 }

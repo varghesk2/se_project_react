@@ -71,6 +71,27 @@ function App() {
     };
   }, [activeModal]);
 
+  const handleAddGarmentSubmit = (e) => {
+    e.preventDefault();
+
+    const form = e.target;
+
+    const name = form.name.value;
+    const imageUrl = form.imageUrl.value;
+    const weather = form["weather-type-select"].value;
+
+    const newItem = {
+      name,
+      imageUrl,
+      weather,
+      _id: Date.now(),
+    };
+
+    setClothingItems((prev) => [newItem, ...prev]);
+
+    closeActiveModal();
+  };
+
   return (
     <div className="page">
       <div className="page__content">
@@ -91,23 +112,28 @@ function App() {
         buttonText="Add garment"
         onClose={closeActiveModal}
         isOpen={activeModal === "add-garment"}
+        onSubmit={handleAddGarmentSubmit}
       >
+
         <label htmlFor="name" className="modal__label">
           Name
           <input
             type="text"
             id="name"
+            name="name" 
             className="modal__input"
             placeholder="Name"
             required
           />
         </label>
 
+        
         <label htmlFor="imageUrl" className="modal__label">
           Image
           <input
             type="url"
             id="imageUrl"
+            name="imageUrl" 
             className="modal__input"
             placeholder="Image Url"
             required
@@ -133,6 +159,7 @@ function App() {
               name="weather-type-select"
               value="warm"
               className="modal__radio-input"
+              defaultChecked 
             />
             Warm
           </label>
@@ -149,6 +176,7 @@ function App() {
         </fieldset>
       </ModalWithForm>
 
+    
       <ItemModal
         card={selectedCard}
         onClose={closeActiveModal}

@@ -1,28 +1,23 @@
+import ItemCard from "./ItemCard";
 import "../blocks/Main.css";
 
-const Main = ({ weatherData, clothingItems, onCardClick }) => {
-  const filteredItems = clothingItems.filter(
-    (item) => item.weather === weatherData?.type,
-  );
-
+function Main({ weatherData, clothingItems, onCardClick }) {
   return (
     <main className="main">
-      <section className="main__weather">
-        <p>Temperature: {weatherData?.temp}°F</p>
+      <section className="weather">
+        <h2 className="weather__temp">{weatherData.temp}°F</h2>
+        <p className="weather__info">
+          Today is {weatherData.type} in {weatherData.city}
+        </p>
       </section>
 
-      <ul className="main__items">
-        {filteredItems.map((item) => (
-          <li key={item._id}>
-            <div onClick={() => onCardClick(item)}>
-              <img src={item.link} alt={item.name} width="100" />
-              <p>{item.name}</p>
-            </div>
-          </li>
+      <section className="cards">
+        {clothingItems.map((item) => (
+          <ItemCard key={item._id} item={item} onCardClick={onCardClick} />
         ))}
-      </ul>
+      </section>
     </main>
   );
-};
+}
 
 export default Main;

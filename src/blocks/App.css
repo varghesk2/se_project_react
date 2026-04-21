@@ -1,9 +1,10 @@
-.app {
-  background-color: #f3f3f3;
+.page {
+  background-color: #f5f6fa;
+  min-height: 100vh;
 }
 
-.app__content {
-  max-width: 1360px;
+.page__content {
+  max-width: 1100px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 20px;
 }

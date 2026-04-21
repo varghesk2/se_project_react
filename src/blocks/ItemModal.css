@@ -1,30 +1,76 @@
-.itemmodal__content_type_image {
-  width: 498px;
-  height: 610px;
-  padding: 0;
-}
-
-.itemmodal__image {
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
-  height: 498px;
-  border-radius: 16px 16px 0 0;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4); 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
 }
 
-.itemmodal__close_type_image {
-  background: transparent url("/src/images/white-close.png") no-repeat center;
-  color: #fff;
+.modal_is-opened {
+  opacity: 1;
+  pointer-events: all;
 }
 
-.itemmodal__weather {
-  padding-top: 12px;
+.modal__content {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  width: 420px;
+  position: relative;
 }
 
-.itemmodal__caption,
-.itemmodal__weather {
-  font: 700 20px/24px "Cabinet Grotesk", Arial, sans-serif;
-  margin: 0;
+.modal__close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  border: none;
+  background: none;
+  font-size: 18px;
+  cursor: pointer;
 }
 
-.itemmodal__footer {
-  margin: 20px 0 32px 20px;
+.modal__label {
+  display: block;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.modal__input {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.modal__radio-buttons {
+  margin-bottom: 15px;
+}
+
+.modal__label_type_radio {
+  display: flex;
+  gap: 6px;
+  margin-top: 5px;
+}
+
+button[type="submit"] {
+  width: 100%;
+  padding: 10px;
+  background-color: #000;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+button[type="submit"]:hover {
+  opacity: 0.85;
 }

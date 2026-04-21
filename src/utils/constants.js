@@ -7,11 +7,13 @@ export const coordinates = {
 
 export const defaultClothingItems = [
   {
+    _id: 1, 
     name: "T-Shirt",
     weather: "hot",
     imageUrl: "https://placehold.co/300x300",
   },
   {
+    _id: 2, 
     name: "Jacket",
     weather: "cold",
     imageUrl: "https://placehold.co/300x300",
