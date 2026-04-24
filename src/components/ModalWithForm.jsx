@@ -6,25 +6,33 @@ function ModalWithForm({
   buttonText,
   isOpen,
   onClose,
-  onSubmit, 
+  onSubmit,
   children,
 }) {
   return (
     <div
       className={`modal modal_type_${name} ${isOpen ? "modal_is-opened" : ""}`}
-      onClick={onClose}
+      onClick={onClose} 
     >
-      <div className="modal__content" onClick={(e) => e.stopPropagation()}>
-        <button className="modal__close" onClick={onClose} aria-label="Close" />
+      <div
+        className="modal__content"
+        onClick={(e) => e.stopPropagation()} 
+      >
+        <button
+          type="button"
+          className="modal__close"
+          onClick={onClose}
+          aria-label="Close modal"
+        />
 
-        <h2>{title}</h2>
+        <h2 className="modal__title">{title}</h2>
 
-        <form
-          name={name}
-          onSubmit={onSubmit} 
-        >
+        <form className="modal__form" onSubmit={onSubmit}>
           {children}
-          <button type="submit">{buttonText}</button>
+
+          <button type="submit" className="modal__submit">
+            {buttonText}
+          </button>
         </form>
       </div>
     </div>

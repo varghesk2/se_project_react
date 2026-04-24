@@ -19,17 +19,28 @@ function App() {
 
   const [clothingItems, setClothingItems] = useState([]);
   const [activeModal, setActiveModal] = useState("");
-  const [selectedCard, setSelectedCard] = useState({});
+  const [selectedCard, setSelectedCard] = useState(null);
+
+
+  const [tempUnit, setTempUnit] = useState("F");
+
+  const handleToggleUnit = () => {
+    setTempUnit((prev) => (prev === "F" ? "C" : "F"));
+  };
 
   useEffect(() => {
-    setClothingItems(defaultClothingItems);
+    const normalizedItems = defaultClothingItems.map((item) => ({
+      ...item,
+      imageUrl: item.imageUrl || item.link,
+    }));
+
+    setClothingItems(normalizedItems);
   }, []);
 
   useEffect(() => {
     getWeather(coordinates, API_KEY)
       .then((data) => {
-        const processedWeatherData = processWeatherData(data);
-        setWeatherData(processedWeatherData);
+        setWeatherData(processWeatherData(data));
       })
       .catch(console.error);
   }, []);
@@ -47,28 +58,13 @@ function App() {
     setActiveModal("");
   };
 
-  const closeOnOverlayClick = (e) => {
-    if (e.target.classList.contains("modal_is-opened")) {
-      closeActiveModal();
-    }
-  };
-
-  const handleKeyDown = (e) => {
-    if (e.key === "Escape") {
-      closeActiveModal();
-    }
-  };
-
   useEffect(() => {
     if (!activeModal) return;
 
-    document.addEventListener("mousedown", closeOnOverlayClick);
-    document.addEventListener("keydown", handleKeyDown);
+    const handleEsc = (e) => e.key === "Escape" && closeActiveModal();
+    document.addEventListener("keydown", handleEsc);
 
-    return () => {
-      document.removeEventListener("mousedown", closeOnOverlayClick);
-      document.removeEventListener("keydown", handleKeyDown);
-    };
+    return () => document.removeEventListener("keydown", handleEsc);
   }, [activeModal]);
 
   const handleAddGarmentSubmit = (e) => {
@@ -76,31 +72,32 @@ function App() {
 
     const form = e.target;
 
-    const name = form.name.value;
-    const imageUrl = form.imageUrl.value;
-    const weather = form["weather-type-select"].value;
-
     const newItem = {
-      name,
-      imageUrl,
-      weather,
+      name: form.name.value,
+      imageUrl: form.imageUrl.value,
+      weather: form["weather-type-select"].value,
       _id: Date.now(),
     };
 
     setClothingItems((prev) => [newItem, ...prev]);
-
     closeActiveModal();
   };
 
   return (
     <div className="page">
       <div className="page__content">
-        <Header handleAddClick={handleAddClick} weatherData={weatherData} />
+        <Header
+          handleAddClick={handleAddClick}
+          weatherData={weatherData}
+          tempUnit={tempUnit}
+          onToggleUnit={handleToggleUnit}
+        />
 
         <Main
           weatherData={weatherData}
-          onCardClick={handleCardClick}
           clothingItems={clothingItems}
+          onCardClick={handleCardClick}
+          tempUnit={tempUnit}
         />
 
         <Footer />
@@ -110,32 +107,28 @@ function App() {
         name="add-garment"
         title="New garment"
         buttonText="Add garment"
-        onClose={closeActiveModal}
         isOpen={activeModal === "add-garment"}
+        onClose={closeActiveModal}
         onSubmit={handleAddGarmentSubmit}
       >
-
-        <label htmlFor="name" className="modal__label">
+        <label className="modal__label">
           Name
           <input
             type="text"
-            id="name"
-            name="name" 
+            name="name"
             className="modal__input"
             placeholder="Name"
             required
           />
         </label>
 
-        
-        <label htmlFor="imageUrl" className="modal__label">
+        <label className="modal__label">
           Image
           <input
             type="url"
-            id="imageUrl"
-            name="imageUrl" 
+            name="imageUrl"
             className="modal__input"
-            placeholder="Image Url"
+            placeholder="Image URL"
             required
           />
         </label>
@@ -143,7 +136,7 @@ function App() {
         <fieldset className="modal__radio-buttons">
           <legend className="modal__legend">Select the weather type:</legend>
 
-          <label className="modal__label modal__label_type_radio">
+          <label className="modal__label_type_radio">
             <input
               type="radio"
               name="weather-type-select"
@@ -153,18 +146,18 @@ function App() {
             Hot
           </label>
 
-          <label className="modal__label modal__label_type_radio">
+          <label className="modal__label_type_radio">
             <input
               type="radio"
               name="weather-type-select"
               value="warm"
+              defaultChecked
               className="modal__radio-input"
-              defaultChecked 
             />
             Warm
           </label>
 
-          <label className="modal__label modal__label_type_radio">
+          <label className="modal__label_type_radio">
             <input
               type="radio"
               name="weather-type-select"
@@ -176,11 +169,10 @@ function App() {
         </fieldset>
       </ModalWithForm>
 
-    
       <ItemModal
         card={selectedCard}
-        onClose={closeActiveModal}
         isOpen={activeModal === "preview"}
+        onClose={closeActiveModal}
       />
     </div>
   );

@@ -1,7 +1,7 @@
-
 import "../blocks/Header.css";
+import profilePic from "../images/profile.png";
 
-function Header({ handleAddClick, weatherData }) {
+function Header({ handleAddClick, weatherData, tempUnit, onToggleUnit }) {
   const currentDate = new Date().toLocaleString("default", {
     month: "long",
     day: "numeric",
@@ -9,15 +9,47 @@ function Header({ handleAddClick, weatherData }) {
 
   return (
     <header className="header">
-      <h1>WTWR</h1>
-      <p>{currentDate}</p>
-      <p>{weatherData?.city}</p>
+      <div className="header__left">
+        <h1 className="header__logo">wtwr°</h1>
+        <p className="header__date-location">
+          {currentDate}, {weatherData?.city || "Loading..."}
+        </p>
+      </div>
 
-      <button onClick={handleAddClick}>Add Clothes</button>
+      <div className="header__right">
+        <button
+          type="button"
+          className="toggle"
+          onClick={onToggleUnit}
+          aria-label={`Switch temperature to ${
+            tempUnit === "F" ? "Celsius" : "Fahrenheit"
+          }`}
+        >
+          <span className={`toggle__label ${tempUnit === "F" ? "active" : ""}`}>
+            F
+          </span>
+          <span className={`toggle__label ${tempUnit === "C" ? "active" : ""}`}>
+            C
+          </span>
+          <span
+            className={`toggle__circle ${
+              tempUnit === "C" ? "toggle__circle_right" : ""
+            }`}
+          />
+        </button>
 
-      <div className="header__user">
-        <p>User Name</p>
-        <img src="https://placehold.co/40" alt="User avatar" />
+        <button
+          className="header__add-button"
+          onClick={handleAddClick}
+          type="button"
+        >
+          + Add clothes
+        </button>
+
+        <div className="header__user">
+          <p className="header__username">Kevin Varghese</p>
+          <img src={profilePic} alt="User avatar" className="header__avatar" />
+        </div>
       </div>
     </header>
   );
