@@ -36,3 +36,4 @@ export const defaultClothingItems = [
     imageUrl: sneakersImg,
   },
 ];
+

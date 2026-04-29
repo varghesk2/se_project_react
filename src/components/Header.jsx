@@ -1,7 +1,8 @@
 import "../blocks/Header.css";
 import profilePic from "../images/profile.png";
+import ToggleSwitch from "./ToggleSwitch";
 
-function Header({ handleAddClick, weatherData, tempUnit, onToggleUnit }) {
+function Header({ handleAddClick, weatherData }) {
   const currentDate = new Date().toLocaleString("default", {
     month: "long",
     day: "numeric",
@@ -17,26 +18,7 @@ function Header({ handleAddClick, weatherData, tempUnit, onToggleUnit }) {
       </div>
 
       <div className="header__right">
-        <button
-          type="button"
-          className="toggle"
-          onClick={onToggleUnit}
-          aria-label={`Switch temperature to ${
-            tempUnit === "F" ? "Celsius" : "Fahrenheit"
-          }`}
-        >
-          <span className={`toggle__label ${tempUnit === "F" ? "active" : ""}`}>
-            F
-          </span>
-          <span className={`toggle__label ${tempUnit === "C" ? "active" : ""}`}>
-            C
-          </span>
-          <span
-            className={`toggle__circle ${
-              tempUnit === "C" ? "toggle__circle_right" : ""
-            }`}
-          />
-        </button>
+        <ToggleSwitch />
 
         <button
           className="header__add-button"
