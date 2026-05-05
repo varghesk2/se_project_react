@@ -4,14 +4,10 @@ function ItemCard({ item, onCardClick }) {
   const fallbackImage =
     "https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/wtwr-project/T-shirt.png";
 
-  const getImageSrc = () => {
-    return item?.imageUrl || item?.link || item?.image || fallbackImage;
-  };
-
   return (
     <div className="card" onClick={() => onCardClick?.(item)}>
       <img
-        src={getImageSrc()}
+        src={item?.imageUrl || fallbackImage}
         alt={item?.name || "Clothing item"}
         className="card__image"
         onError={(e) => {

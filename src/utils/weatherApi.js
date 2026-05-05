@@ -12,19 +12,6 @@ export function getWeather(coordinates, API_KEY) {
 }
 
 export function processWeatherData(data) {
-  return {
-    temp: data.main.temp,
-    city: data.name,
-  };
-}
-
-export function getWeatherCondition(temp) {
-  if (temp >= 86) return "hot";
-  if (temp >= 66) return "warm";
-  return "cold";
-}
-
-export function processWeatherData(data) {
   const tempF = Math.round(data.main.temp);
 
   return {
@@ -34,4 +21,10 @@ export function processWeatherData(data) {
     },
     city: data.name,
   };
+}
+
+export function getWeatherCondition(temp) {
+  if (temp >= 86) return "hot";
+  if (temp >= 66) return "warm";
+  return "cold";
 }

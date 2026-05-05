@@ -3,6 +3,8 @@ import shortsImg from "../images/Shorts.png";
 import capImg from "../images/Cap.png";
 import sneakersImg from "../images/Sneakers.png";
 
+export const baseUrl = "http://localhost:3001";
+
 export const API_KEY = "429deac8c7907c023c4376db875fcdd5";
 
 export const coordinates = {

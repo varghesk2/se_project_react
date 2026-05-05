@@ -22,7 +22,10 @@
 
 .modal__content {
   position: relative;
-  width: 496px;
+  width: 100%;
+  max-width: 496px;
+  max-height: 90vh;
+  overflow-y: auto;
   padding: 28px 28px 36px;
   background-color: #fff;
   border-radius: 20px;
