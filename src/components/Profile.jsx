@@ -4,7 +4,7 @@ import "../blocks/Profile.css";
 
 function Profile({ clothingItems, onCardClick, onAddClick }) {
   return (
-    <div className="profile">
+    <div className="profile__sidebar">
       <SideBar />
       <ClothesSection
         clothingItems={clothingItems}

@@ -2,8 +2,6 @@
   min-height: 100vh;
   background-color: #f3f3f3;
   width: 100%;
-  display: flex;
-  justify-content: center;
 }
 
 .page__content {
@@ -16,7 +14,5 @@
 
 body {
   margin: 0;
-  display: flex;
-  justify-content: center;   
   background-color: #f3f3f3;
 }

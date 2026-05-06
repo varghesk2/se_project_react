@@ -3,7 +3,7 @@ import "../blocks/ClothesSection.css";
 
 function ClothesSection({ clothingItems, onCardClick, onAddClick }) {
   return (
-    <div className="clothes-section">
+    <div className="profile_content">
       <div className="clothes-section__header">
         <h2>Your items</h2>
         <button onClick={onAddClick}>+ Add new</button>

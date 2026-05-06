@@ -1,5 +1,21 @@
 .profile {
   display: flex;
+  gap: 40px;
+  width: 100%;
+}
+
+.profile__sidebar {
+  height: 1440px;
+  width: 976px;
+  flex-shrink: 0;
+}
+
+.profile__content {
+  flex: 1;
+}
+
+.clothes-section__items {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   gap: 20px;
-  padding: 20px;
 }
