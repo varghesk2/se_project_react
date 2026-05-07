@@ -2,20 +2,22 @@
   display: flex;
   gap: 40px;
   width: 100%;
+  padding: 20px 0;
 }
 
 .profile__sidebar {
-  height: 1440px;
-  width: 976px;
+  width: 250px;
   flex-shrink: 0;
 }
 
 .profile__content {
   flex: 1;
+ min-width: 0;
 }
 
 .clothes-section__items {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   gap: 20px;
+  width: 100%;
 }

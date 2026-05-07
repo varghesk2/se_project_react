@@ -4,13 +4,18 @@ import "../blocks/Profile.css";
 
 function Profile({ clothingItems, onCardClick, onAddClick }) {
   return (
-    <div className="profile__sidebar">
-      <SideBar />
-      <ClothesSection
-        clothingItems={clothingItems}
-        onCardClick={onCardClick}
-        onAddClick={onAddClick}
-      />
+    <div className="profile">
+      <div className="profile__sidebar">
+        <SideBar />
+      </div>
+
+      <div className="profile__content">
+        <ClothesSection
+          clothingItems={clothingItems}
+          onCardClick={onCardClick}
+          onAddClick={onAddClick}
+        />
+      </div>
     </div>
   );
 }
