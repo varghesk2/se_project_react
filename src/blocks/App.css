@@ -1,13 +1,12 @@
 .page {
   min-height: 100vh;
   background-color: #f3f3f3;
-  width: 100%;
 }
 
-.page__content {
-  width: 100%;      
+.page__content {     
   padding: 20px 40px;  
   box-sizing: border-box;
+  min-width: 1360px;
 }
 
 body {

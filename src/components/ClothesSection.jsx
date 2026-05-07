@@ -3,10 +3,13 @@ import "../blocks/ClothesSection.css";
 
 function ClothesSection({ clothingItems, onCardClick, onAddClick }) {
   return (
-    <div className="profile_content">
+    <div className="profile__content">
       <div className="clothes-section__header">
-        <h2>Your items</h2>
-        <button onClick={onAddClick}>+ Add new</button>
+        <h2 className="clothes-section__title">Your items</h2>
+
+        <button className="clothes-section__add-btn" onClick={onAddClick}>
+          + Add new
+        </button>
       </div>
 
       <div className="clothes-section__items">
