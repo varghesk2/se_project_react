@@ -25,21 +25,25 @@
 }
 
 .modal__footer {
-  padding: 16px 20px;
+  padding: 20px;
   color: #000;
   display: flex;
   flex-direction: column;
   gap: 8px;
+  position: relative;
+  padding: 20px;
 }
 
 .modal__delete {
-  margin-top: 12px;
+  position: absolute;
+  top: 20px;
+  right: 20px;
   border: none;
   background: none;
   color: #ff4d00;
   cursor: pointer;
+  font-size: 16px;
   font-weight: 500;
-  align-self: flex-start;
 }
 
 .modal__delete:hover {

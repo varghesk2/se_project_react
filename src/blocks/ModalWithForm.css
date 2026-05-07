@@ -1,17 +1,13 @@
 .modal {
   position: fixed;
   inset: 0;
-
   display: flex;
   justify-content: center;
   align-items: center;
-
-  background-color: rgba(0, 0, 0, 0.6); 
-
+  background-color: rgba(0, 0, 0, 0.5);
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.3s ease;
-
   z-index: 1000;
 }
 
@@ -24,9 +20,7 @@
   position: relative;
   width: 100%;
   max-width: 496px;
-  max-height: 90vh;
-  overflow-y: auto;
-  padding: 28px 28px 36px;
+  padding: 28px;
   background-color: #fff;
   border-radius: 20px;
   box-sizing: border-box;
@@ -35,9 +29,9 @@
 .modal__close {
   position: absolute;
   top: 20px;
-  right: 28px;
-  width: 20px;
-  height: 20px;
+  right: 20px;
+  width: 24px;
+  height: 24px;
   border: none;
   background: transparent;
   cursor: pointer;
@@ -46,14 +40,8 @@
 
 .modal__close::before {
   content: "×";
-  font-size: 24px;
-  color: gray;  
-}
-
-.modal__close::before {
-  content: "×";
   font-size: 28px;
-  line-height: 20px;
+  line-height: 24px;
   color: #000;
   display: block;
   text-align: center;
@@ -61,8 +49,9 @@
 
 .modal__title {
   margin: 0 0 24px;
-  font: 700 16px/20px "Cabinet Grotesk", Arial, sans-serif;
   color: #000;
+  font-size: 20px;
+  font-weight: 700;
 }
 
 .modal__form {
@@ -71,62 +60,71 @@
 }
 
 .modal__label {
+  display: flex;
+  flex-direction: column;
   margin-bottom: 24px;
-  font: 700 16px/20px "Cabinet Grotesk", Arial, sans-serif;
   color: #000;
+  font-size: 16px;
+  font-weight: 500;
 }
 
 .modal__input {
-  display: block;
   width: 100%;
   margin-top: 8px;
   padding: 0 0 8px;
   border: none;
   border-bottom: 1px solid #000;
   outline: none;
+  background: transparent;
   box-sizing: border-box;
-  font: 400 16px/20px "Cabinet Grotesk", Arial, sans-serif;
+  font-size: 16px;
 }
 
 .modal__radio-buttons {
   margin: 0 0 32px;
   padding: 0;
   border: none;
-  font: 700 16px/20px "Cabinet Grotesk", Arial, sans-serif;
-  color: #000;
 }
 
 .modal__legend {
-  margin-bottom: 8px;
-  padding: 0;
+  margin-bottom: 16px;
+  color: #000;
+  font-size: 16px;
+  font-weight: 500;
 }
 
 .modal__label_type_radio {
-  margin: 0;
-  padding-top: 8px;
-  font-weight: 400;
-  color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  color: #000;
+  font-size: 16px;
 }
 
 .modal__radio-input {
-  margin-right: 8px;
+  margin: 0;
 }
 
 .modal__submit {
-  width: 124px;
+  width: 140px;
   height: 36px;
   border: none;
   border-radius: 4px;
   background-color: #000;
   color: #fff;
+  font-size: 16px;
   cursor: pointer;
-  font: 400 16px/20px "Cabinet Grotesk", Arial, sans-serif;
+  transition: opacity 0.3s ease,
+    background-color 0.3s ease;
 }
 
 .modal__submit:hover {
-  background-color: rgba(0, 0, 0, 0.6);
+  opacity: 0.7;
 }
 
 .modal__submit:disabled {
-  background-color: rgba(0, 0, 0, 0.3);
+  background-color: #d3d3d3;
+  color: #fff;
+  cursor: not-allowed;
 }

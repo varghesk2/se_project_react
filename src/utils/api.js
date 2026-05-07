@@ -8,11 +8,12 @@ export const getItems = () => {
 
 export const addItem = (item) => {
   const newItem = {
-    _id: Date.now(),
     ...item,
+    _id: crypto.randomUUID(),
   };
 
   items.unshift(newItem);
+
   return Promise.resolve(newItem);
 };
 

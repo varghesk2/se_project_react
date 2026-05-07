@@ -9,6 +9,7 @@ import Profile from "./Profile";
 import AddItemModal from "./AddItemModal";
 import ItemModal from "./ItemModal";
 import Footer from "./Footer";
+import DeleteConfirmationModal from "./DeleteConfirmationModal";
 
 import { API_KEY, coordinates } from "../utils/constants";
 import { getWeather, processWeatherData } from "../utils/weatherApi";
@@ -31,6 +32,7 @@ function App() {
   const [clothingItems, setClothingItems] = useState([]);
   const [activeModal, setActiveModal] = useState("");
   const [selectedCard, setSelectedCard] = useState(null);
+  const [cardToDelete, setCardToDelete] = useState(null);
 
   useEffect(() => {
     getItems().then(setClothingItems).catch(console.error);
@@ -51,9 +53,10 @@ function App() {
     setActiveModal("add-garment");
   };
 
-  const closeActiveModal = () => {
-    setActiveModal("");
-  };
+const closeActiveModal = () => {
+  setActiveModal("");
+  setCardToDelete(null);
+};
 
   useEffect(() => {
     if (!activeModal) return;
@@ -70,12 +73,20 @@ function App() {
     });
   };
 
-  const handleDeleteItem = (card) => {
-    deleteItem(card.id).then(() => {
-      setClothingItems((prev) => prev.filter((item) => item.id !== card.id));
-      closeActiveModal();
-    });
-  };
+const handleDeleteClick = (card) => {
+  setCardToDelete(card);
+  setActiveModal("confirm-delete");
+};
+
+const handleConfirmDelete = () => {
+  setClothingItems((prevItems) =>
+    prevItems.filter((item) => item._id !== cardToDelete._id),
+  );
+
+  setCardToDelete(null);
+  closeActiveModal();
+};
+
 
   return (
     <BrowserRouter basename="/se_project_react">
@@ -123,8 +134,15 @@ function App() {
             card={selectedCard}
             isOpen={activeModal === "preview"}
             onClose={closeActiveModal}
-            onDelete={handleDeleteItem}
+            onDelete={handleDeleteClick}
           />
+
+          <DeleteConfirmationModal
+            isOpen={activeModal === "confirm-delete"}
+            onClose={closeActiveModal}
+            onConfirm={handleConfirmDelete}
+          />
+
         </div>
       </CurrentTemperatureUnitContext.Provider>
     </BrowserRouter>

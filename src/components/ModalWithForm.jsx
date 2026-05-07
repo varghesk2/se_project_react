@@ -8,16 +8,14 @@ function ModalWithForm({
   onClose,
   onSubmit,
   children,
+  isDisabled,
 }) {
   return (
     <div
       className={`modal modal_type_${name} ${isOpen ? "modal_is-opened" : ""}`}
-      onClick={onClose} 
+      onClick={onClose}
     >
-      <div
-        className="modal__content"
-        onClick={(e) => e.stopPropagation()} 
-      >
+      <div className="modal__content" onClick={(e) => e.stopPropagation()}>
         <button
           type="button"
           className="modal__close"
@@ -30,7 +28,7 @@ function ModalWithForm({
         <form className="modal__form" onSubmit={onSubmit}>
           {children}
 
-          <button type="submit" className="modal__submit">
+          <button type="submit" className="modal__submit" disabled={isDisabled}>
             {buttonText}
           </button>
         </form>
