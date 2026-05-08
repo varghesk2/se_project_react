@@ -25,14 +25,14 @@ function App() {
 
   const [currentTemperatureUnit, setCurrentTemperatureUnit] = useState("F");
 
-  const handleToggleSwitchChange = () => {
-    setCurrentTemperatureUnit((prev) => (prev === "F" ? "C" : "F"));
-  };
-
   const [clothingItems, setClothingItems] = useState([]);
   const [activeModal, setActiveModal] = useState("");
   const [selectedCard, setSelectedCard] = useState(null);
   const [cardToDelete, setCardToDelete] = useState(null);
+
+  const handleToggleSwitchChange = () => {
+    setCurrentTemperatureUnit((prev) => (prev === "F" ? "C" : "F"));
+  };
 
   useEffect(() => {
     getItems().then(setClothingItems).catch(console.error);
@@ -40,7 +40,9 @@ function App() {
 
   useEffect(() => {
     getWeather(coordinates, API_KEY)
-      .then((data) => setWeatherData(processWeatherData(data)))
+      .then((data) => {
+        setWeatherData(processWeatherData(data));
+      })
       .catch(console.error);
   }, []);
 
@@ -53,45 +55,68 @@ function App() {
     setActiveModal("add-garment");
   };
 
-const closeActiveModal = () => {
-  setActiveModal("");
-  setCardToDelete(null);
-};
+  const closeActiveModal = () => {
+    setActiveModal("");
+    setSelectedCard(null);
+    setCardToDelete(null);
+  };
 
   useEffect(() => {
     if (!activeModal) return;
-    const handleEsc = (e) => e.key === "Escape" && closeActiveModal();
+
+    const handleEsc = (e) => {
+      if (e.key === "Escape") {
+        closeActiveModal();
+      }
+    };
+
     document.addEventListener("keydown", handleEsc);
-    return () => document.removeEventListener("keydown", handleEsc);
+
+    return () => {
+      document.removeEventListener("keydown", handleEsc);
+    };
   }, [activeModal]);
 
   const handleAddItem = (item, resetForm) => {
-    addItem(item).then((newItem) => {
-      setClothingItems((prev) => [newItem, ...prev]);
-      resetForm();
-      closeActiveModal();
-    });
+    addItem(item)
+      .then((newItem) => {
+        setClothingItems((prev) => [newItem, ...prev]);
+        resetForm();
+        closeActiveModal();
+      })
+      .catch((err) => {
+        console.error("Failed to add item:", err);
+      });
   };
 
-const handleDeleteClick = (card) => {
-  setCardToDelete(card);
-  setActiveModal("confirm-delete");
-};
+  const handleDeleteClick = (card) => {
+    setCardToDelete(card);
+    setActiveModal("confirm-delete");
+  };
 
-const handleConfirmDelete = () => {
-  setClothingItems((prevItems) =>
-    prevItems.filter((item) => item._id !== cardToDelete._id),
-  );
+  const handleConfirmDelete = () => {
+    if (!cardToDelete) return;
 
-  setCardToDelete(null);
-  closeActiveModal();
-};
+    deleteItem(cardToDelete._id)
+      .then(() => {
+        setClothingItems((prevItems) =>
+          prevItems.filter((item) => item._id !== cardToDelete._id),
+        );
 
+        closeActiveModal();
+      })
+      .catch((err) => {
+        console.error("Failed to delete item:", err);
+      });
+  };
 
   return (
     <BrowserRouter basename="/se_project_react">
       <CurrentTemperatureUnitContext.Provider
-        value={{ currentTemperatureUnit, handleToggleSwitchChange }}
+        value={{
+          currentTemperatureUnit,
+          handleToggleSwitchChange,
+        }}
       >
         <div className="page">
           <div className="page__content">
@@ -142,7 +167,6 @@ const handleConfirmDelete = () => {
             onClose={closeActiveModal}
             onConfirm={handleConfirmDelete}
           />
-
         </div>
       </CurrentTemperatureUnitContext.Provider>
     </BrowserRouter>

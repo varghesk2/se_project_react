@@ -62,22 +62,6 @@
   object-fit: cover;
 }
 
-.toggle {
-  position: relative;
-  width: 50px;
-  height: 24px;
-  background-color: #fff;
-  border-radius: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  cursor: pointer;
-  border: 1px solid #000;
-  padding: 0;
-  font-size: 12px;
-  font-weight: 500;
-}
-
 .toggle__label {
   z-index: 2;
   color: #000;
