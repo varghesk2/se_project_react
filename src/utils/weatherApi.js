@@ -7,6 +7,7 @@ export function getWeather(coordinates, API_KEY) {
     if (!res.ok) {
       return Promise.reject(`Error: ${res.status}`);
     }
+
     return res.json();
   });
 }
@@ -20,11 +21,13 @@ export function processWeatherData(data) {
       C: Math.round((tempF - 32) * (5 / 9)),
     },
     city: data.name,
+    type: getWeatherCondition(tempF),
   };
 }
 
 export function getWeatherCondition(temp) {
   if (temp >= 86) return "hot";
   if (temp >= 66) return "warm";
+
   return "cold";
 }

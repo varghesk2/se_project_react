@@ -22,7 +22,7 @@ export const defaultClothingItems = [
   {
     _id: 2,
     name: "Shorts",
-    weather: "cold",
+    weather: "hot",
     imageUrl: shortsImg,
   },
   {

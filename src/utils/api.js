@@ -1,23 +1,30 @@
-import { defaultClothingItems } from "./constants";
+const baseUrl = "http://localhost:3001";
 
-let items = [...defaultClothingItems];
+const handleResponse = async (res) => {
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`Error ${res.status}: ${text}`);
+  }
+
+  return res.json();
+};
 
 export const getItems = () => {
-  return Promise.resolve(items);
+  return fetch(`${baseUrl}/items`).then(handleResponse);
 };
 
 export const addItem = (item) => {
-  const newItem = {
-    ...item,
-    _id: crypto.randomUUID(),
-  };
-
-  items.unshift(newItem);
-
-  return Promise.resolve(newItem);
+  return fetch(`${baseUrl}/items`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(item),
+  }).then(handleResponse);
 };
 
 export const deleteItem = (id) => {
-  items = items.filter((item) => item._id !== id);
-  return Promise.resolve({ message: "deleted" });
+  return fetch(`${baseUrl}/items/${id}`, {
+    method: "DELETE",
+  }).then(handleResponse);
 };
