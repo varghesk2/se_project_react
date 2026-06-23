@@ -1,31 +1,36 @@
 import { useContext } from "react";
 import CurrentTemperatureUnitContext from "../contexts/CurrentTemperatureUnitContext";
-import ItemCard from "./ItemCard";
 import WeatherCard from "./WeatherCard";
+import ItemCard from "./ItemCard";
 import "../blocks/Main.css";
 
-function Main({ weatherData, clothingItems = [], onCardClick }) {
-  const { currentTemperatureUnit } = useContext(CurrentTemperatureUnitContext);
+function Main({ weatherData, clothingItems, onCardClick }) {
+  const { currentTemperatureUnit } = useContext(
+    CurrentTemperatureUnitContext
+  );
+
+  const filteredItems = clothingItems.filter(
+    (item) => item.weather === weatherData.type
+  );
 
   return (
     <main className="main">
-      <section className="weather">
-        <WeatherCard weatherData={weatherData} />
-      </section>
+      <WeatherCard weatherData={weatherData} />
 
       <p className="main__description">
-        Today is {weatherData.temperature[currentTemperatureUnit]}°
+        Today is{" "}
+        {weatherData.temperature?.[currentTemperatureUnit]}°
         {currentTemperatureUnit} / You may want to wear:
       </p>
 
       <section className="cards">
-        {Array.isArray(clothingItems) &&
-          weatherData.type &&
-          clothingItems
-            .filter((item) => item.weather === weatherData.type)
-            .map((item) => (
-              <ItemCard key={item.id} item={item} onCardClick={onCardClick} />
-            ))}
+        {filteredItems.map((item) => (
+          <ItemCard
+            key={item._id}
+            item={item}
+            onCardClick={onCardClick}
+          />
+        ))}
       </section>
     </main>
   );
