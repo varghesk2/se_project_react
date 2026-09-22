@@ -9,6 +9,8 @@ import Profile from "./Profile";
 import AddItemModal from "./AddItemModal";
 import ItemModal from "./ItemModal";
 import DeleteConfirmationModal from "./DeleteConfirmationModal";
+import RegisterModal from "./RegisterModal";
+import LoginModal from "./LoginModal";
 import Footer from "./Footer";
 
 import CurrentTemperatureUnitContext from "../contexts/CurrentTemperatureUnitContext";
@@ -16,6 +18,7 @@ import CurrentTemperatureUnitContext from "../contexts/CurrentTemperatureUnitCon
 import { API_KEY, coordinates } from "../utils/constants";
 import { getWeather, processWeatherData } from "../utils/weatherApi";
 import { getItems, addItem, deleteItem } from "../utils/api";
+import { signup, signin, checkToken } from "../utils/auth";
 
 function App() {
   const [weatherData, setWeatherData] = useState({
@@ -33,11 +36,32 @@ function App() {
   const [selectedCard, setSelectedCard] = useState(null);
   const [cardToDelete, setCardToDelete] = useState(null);
 
+  const [currentUser, setCurrentUser] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
   const handleToggleSwitchChange = () => {
-    setCurrentTemperatureUnit((prev) =>
-      prev === "F" ? "C" : "F"
-    );
+    setCurrentTemperatureUnit((prev) => (prev === "F" ? "C" : "F"));
   };
+
+  useEffect(() => {
+    const token = localStorage.getItem("jwt");
+
+    if (!token) {
+      return;
+    }
+
+    checkToken(token)
+      .then((user) => {
+        setCurrentUser(user);
+        setIsLoggedIn(true);
+      })
+      .catch((err) => {
+        console.error("Token validation failed:", err);
+        localStorage.removeItem("jwt");
+        setCurrentUser(null);
+        setIsLoggedIn(false);
+      });
+  }, []);
 
   useEffect(() => {
     getItems()
@@ -65,6 +89,11 @@ function App() {
   };
 
   const handleAddClick = () => {
+    if (!isLoggedIn) {
+      setActiveModal("login");
+      return;
+    }
+
     setActiveModal("add-garment");
   };
 
@@ -75,7 +104,9 @@ function App() {
   };
 
   useEffect(() => {
-    if (!activeModal) return;
+    if (!activeModal) {
+      return undefined;
+    }
 
     const handleEsc = (e) => {
       if (e.key === "Escape") {
@@ -90,6 +121,58 @@ function App() {
     };
   }, [activeModal]);
 
+  const handleRegister = (
+    name,
+    avatar,
+    email,
+    password,
+    resetForm
+  ) => {
+    signup(name, avatar, email, password)
+      .then(() => {
+        return signin(email, password);
+      })
+      .then((data) => {
+        localStorage.setItem("jwt", data.token);
+
+        return checkToken(data.token);
+      })
+      .then((user) => {
+        setCurrentUser(user);
+        setIsLoggedIn(true);
+        resetForm();
+        closeActiveModal();
+      })
+      .catch((err) => {
+        console.error("Registration failed:", err);
+      });
+  };
+
+  const handleLogin = (email, password, resetForm) => {
+    signin(email, password)
+      .then((data) => {
+        localStorage.setItem("jwt", data.token);
+
+        return checkToken(data.token);
+      })
+      .then((user) => {
+        setCurrentUser(user);
+        setIsLoggedIn(true);
+        resetForm();
+        closeActiveModal();
+      })
+      .catch((err) => {
+        console.error("Login failed:", err);
+      });
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("jwt");
+    setCurrentUser(null);
+    setIsLoggedIn(false);
+    closeActiveModal();
+  };
+
   const handleAddItem = (item, resetForm) => {
     addItem(item)
       .then((newItem) => {
@@ -103,19 +186,24 @@ function App() {
   };
 
   const handleDeleteClick = (card) => {
+    if (!isLoggedIn) {
+      setActiveModal("login");
+      return;
+    }
+
     setCardToDelete(card);
     setActiveModal("confirm-delete");
   };
 
   const handleConfirmDelete = () => {
-    if (!cardToDelete) return;
+    if (!cardToDelete) {
+      return;
+    }
 
     deleteItem(cardToDelete._id)
       .then(() => {
         setClothingItems((prevItems) =>
-          prevItems.filter(
-            (item) => item._id !== cardToDelete._id
-          )
+          prevItems.filter((item) => item._id !== cardToDelete._id)
         );
 
         closeActiveModal();
@@ -137,6 +225,11 @@ function App() {
           <Header
             handleAddClick={handleAddClick}
             weatherData={weatherData}
+            currentUser={currentUser}
+            isLoggedIn={isLoggedIn}
+            onLoginClick={() => setActiveModal("login")}
+            onRegisterClick={() => setActiveModal("register")}
+            onLogout={handleLogout}
           />
 
           <Routes>
@@ -158,6 +251,8 @@ function App() {
                   clothingItems={clothingItems}
                   onCardClick={handleCardClick}
                   onAddClick={handleAddClick}
+                  currentUser={currentUser}
+                  onLogout={handleLogout}
                 />
               }
             />
@@ -165,6 +260,18 @@ function App() {
 
           <Footer />
         </div>
+
+        <RegisterModal
+          isOpen={activeModal === "register"}
+          onClose={closeActiveModal}
+          onRegister={handleRegister}
+        />
+
+        <LoginModal
+          isOpen={activeModal === "login"}
+          onClose={closeActiveModal}
+          onLogin={handleLogin}
+        />
 
         <AddItemModal
           isOpen={activeModal === "add-garment"}

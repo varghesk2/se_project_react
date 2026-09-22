@@ -9,6 +9,15 @@ const handleResponse = async (res) => {
   return res.json();
 };
 
+const getAuthHeaders = () => {
+  const token = localStorage.getItem("jwt");
+
+  return {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${token}`,
+  };
+};
+
 export const getItems = () => {
   return fetch(`${baseUrl}/items`).then(handleResponse);
 };
@@ -16,9 +25,7 @@ export const getItems = () => {
 export const addItem = (item) => {
   return fetch(`${baseUrl}/items`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers: getAuthHeaders(),
     body: JSON.stringify(item),
   }).then(handleResponse);
 };
@@ -26,5 +33,6 @@ export const addItem = (item) => {
 export const deleteItem = (id) => {
   return fetch(`${baseUrl}/items/${id}`, {
     method: "DELETE",
+    headers: getAuthHeaders(),
   }).then(handleResponse);
 };
