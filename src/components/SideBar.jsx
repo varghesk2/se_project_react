@@ -1,7 +1,7 @@
 import "../blocks/SideBar.css";
 import profilePic from "../images/profile.png";
 
-function SideBar({ currentUser, onLogout }) {
+function SideBar({ currentUser, onLogout, onEditProfile }) {
   return (
     <div className="sidebar">
       <img
@@ -13,6 +13,14 @@ function SideBar({ currentUser, onLogout }) {
       <p className="sidebar__username">
         {currentUser?.name || "User"}
       </p>
+
+      <button
+        className="sidebar__edit"
+        onClick={onEditProfile}
+        type="button"
+      >
+        Edit profile
+      </button>
 
       {onLogout && (
         <button

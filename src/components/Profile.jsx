@@ -5,9 +5,11 @@ import "../blocks/Profile.css";
 function Profile({
   clothingItems,
   onCardClick,
+  onCardLike,
   onAddClick,
   currentUser,
   onLogout,
+  onEditProfile,
 }) {
   return (
     <div className="profile">
@@ -15,6 +17,7 @@ function Profile({
         <SideBar
           currentUser={currentUser}
           onLogout={onLogout}
+          onEditProfile={onEditProfile}
         />
       </div>
 
@@ -22,7 +25,9 @@ function Profile({
         <ClothesSection
           clothingItems={clothingItems}
           onCardClick={onCardClick}
+          onCardLike={onCardLike}
           onAddClick={onAddClick}
+          currentUser={currentUser}
         />
       </div>
     </div>

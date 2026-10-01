@@ -12,9 +12,9 @@ function useForm(initialValues = {}) {
     });
   };
 
-  const resetForm = () => {
-    setValues(initialValues);
-  };
+ const resetForm = (newValues = initialValues) => {
+  setValues(newValues);
+};
 
   return { values, handleChange, resetForm };
 }

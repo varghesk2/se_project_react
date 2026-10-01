@@ -9,6 +9,7 @@
   width: 56px;
   height: 56px;
   border-radius: 50%;
+  object-fit: cover;
 }
 
 .sidebar__username {
@@ -16,4 +17,31 @@
   color: #000;
   font-size: 20px;
   font-weight: 600;
+}
+
+.sidebar__edit {
+  border: none;
+  background: transparent;
+  padding: 0;
+  color: #000;
+  font-size: 16px;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.sidebar__edit:hover {
+  opacity: 0.7;
+}
+
+.sidebar__logout {
+  border: none;
+  background: transparent;
+  padding: 0;
+  color: #000;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.sidebar__logout:hover {
+  opacity: 0.7;
 }

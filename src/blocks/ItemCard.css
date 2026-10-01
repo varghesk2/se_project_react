@@ -1,5 +1,5 @@
 .card {
-  width: 100%;              
+  width: 100%;
   border-radius: 12px;
   overflow: hidden;
   position: relative;
@@ -19,13 +19,35 @@
   border-radius: 8px;
   font-size: 14px;
   font-weight: 500;
-  white-space: nowrap; 
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .card__image {
   width: 100%;
   height: 328px;
-  object-fit: cover; 
+  object-fit: cover;
   display: block;
 }
 
+.card__like-button {
+  border: none;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  color: #000;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.card__like-button:hover {
+  transform: scale(1.1);
+}
+
+.card__like-button_active {
+  color: red;
+}

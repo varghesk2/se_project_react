@@ -1,12 +1,18 @@
 import "../blocks/ItemModal.css";
+import { useContext } from "react";
+import CurrentUserContext from "../contexts/CurrentUserContext";
 
 function ItemModal({ card, isOpen, onClose, onDelete }) {
+  const currentUser = useContext(CurrentUserContext);
+
   if (!isOpen || !card) {
     return null;
   }
 
   const fallbackImage =
     "https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/wtwr-project/T-shirt.png";
+
+  const isOwner = currentUser?._id === card.owner;
 
   return (
     <div
@@ -35,15 +41,19 @@ function ItemModal({ card, isOpen, onClose, onDelete }) {
 
         <div className="modal__footer">
           <p className="modal__name">{card.name || "Unnamed item"}</p>
-          <p className="modal__weather">Weather: {card.weather || "Unknown"}</p>
+          <p className="modal__weather">
+            Weather: {card.weather || "Unknown"}
+          </p>
 
-          <button
-            type="button"
-            className="modal__delete"
-            onClick={() => onDelete?.(card)}
-          >
-            Delete item
-          </button>
+          {isOwner && (
+            <button
+              type="button"
+              className="modal__delete"
+              onClick={() => onDelete?.(card)}
+            >
+              Delete item
+            </button>
+          )}
         </div>
       </div>
     </div>

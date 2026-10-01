@@ -4,7 +4,12 @@ import WeatherCard from "./WeatherCard";
 import ItemCard from "./ItemCard";
 import "../blocks/Main.css";
 
-function Main({ weatherData, clothingItems, onCardClick }) {
+function Main({
+  weatherData,
+  clothingItems,
+  onCardClick,
+  onCardLike,
+}) {
   const { currentTemperatureUnit } = useContext(
     CurrentTemperatureUnitContext
   );
@@ -29,6 +34,7 @@ function Main({ weatherData, clothingItems, onCardClick }) {
             key={item._id}
             item={item}
             onCardClick={onCardClick}
+            onCardLike={onCardLike}
           />
         ))}
       </section>

@@ -36,3 +36,28 @@ export const deleteItem = (id) => {
     headers: getAuthHeaders(),
   }).then(handleResponse);
 };
+
+export const updateUser = (name, avatar) => {
+  return fetch(`${baseUrl}/users/me`, {
+    method: "PATCH",
+    headers: getAuthHeaders(),
+    body: JSON.stringify({
+      name,
+      avatar,
+    }),
+  }).then(handleResponse);
+};
+
+export const addCardLike = (id) => {
+  return fetch(`${baseUrl}/items/${id}/likes`, {
+    method: "PUT",
+    headers: getAuthHeaders(),
+  }).then(handleResponse);
+};
+
+export const removeCardLike = (id) => {
+  return fetch(`${baseUrl}/items/${id}/likes`, {
+    method: "DELETE",
+    headers: getAuthHeaders(),
+  }).then(handleResponse);
+};

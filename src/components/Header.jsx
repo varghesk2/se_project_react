@@ -1,21 +1,25 @@
 import "../blocks/Header.css";
-import profilePic from "../images/profile.png";
 import ToggleSwitch from "./ToggleSwitch";
 import { Link } from "react-router-dom";
+import { useContext } from "react";
+import CurrentUserContext from "../contexts/CurrentUserContext";
 
 function Header({
   handleAddClick,
   weatherData,
-  currentUser,
   isLoggedIn,
   onLoginClick,
   onRegisterClick,
   onLogout,
 }) {
+  const currentUser = useContext(CurrentUserContext);
+
   const currentDate = new Date().toLocaleString("default", {
     month: "long",
     day: "numeric",
   });
+
+  const userInitial = currentUser?.name?.charAt(0).toUpperCase();
 
   return (
     <header className="header">
@@ -47,11 +51,17 @@ function Header({
                 {currentUser?.name || "User"}
               </p>
 
-              <img
-                src={currentUser?.avatar || profilePic}
-                alt="User avatar"
-                className="header__avatar"
-              />
+              {currentUser?.avatar ? (
+                <img
+                  src={currentUser.avatar}
+                  alt="User avatar"
+                  className="header__avatar"
+                />
+              ) : (
+                <div className="header__avatar header__avatar_placeholder">
+                  {userInitial}
+                </div>
+              )}
             </Link>
 
             <button
@@ -87,4 +97,3 @@ function Header({
 }
 
 export default Header;
-
