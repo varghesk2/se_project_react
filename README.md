@@ -13,3 +13,5 @@ The idea of the application is pretty simple - we make a call to an API, which t
 - [Backend Repository](https://github.com/varghesk2/se_project_express)
 
 - [Pitch Video](https://www.loom.com/share/4c05764f447f473c8280769ae91fc73f)
+
+
