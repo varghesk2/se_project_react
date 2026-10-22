@@ -1,5 +1,5 @@
-import "../blocks/ItemCard.css";
 import { useContext } from "react";
+import "../blocks/ItemCard.css";
 import CurrentUserContext from "../contexts/CurrentUserContext";
 
 function ItemCard({ item, onCardClick, onCardLike }) {

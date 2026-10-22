@@ -1,9 +1,13 @@
 const baseUrl = "http://localhost:3001";
 
-const handleResponse = async (res) => {
+export const handleResponse = async (res) => {
   if (!res.ok) {
     const text = await res.text();
     throw new Error(`Error ${res.status}: ${text}`);
+  }
+  
+  if (res.status === 204) {
+    return null;
   }
 
   return res.json();

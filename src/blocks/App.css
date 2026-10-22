@@ -4,12 +4,20 @@
 }
 
 .page__content {
-  padding: 20px 40px;  
   box-sizing: border-box;
-  min-width: 1360px;
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 20px 40px;
 }
 
 body {
   margin: 0;
   background-color: #f3f3f3;
+}
+
+@media screen and (max-width: 600px) {
+  .page__content {
+    padding: 16px;
+  }
 }

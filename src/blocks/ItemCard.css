@@ -40,7 +40,7 @@
   font-size: 20px;
   line-height: 1;
   cursor: pointer;
-  color: #000;
+  color: #fff;
   transition: color 0.2s ease, transform 0.2s ease;
 }
 
@@ -49,5 +49,5 @@
 }
 
 .card__like-button_active {
-  color: red;
+  color: #000;
 }

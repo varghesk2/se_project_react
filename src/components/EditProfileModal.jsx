@@ -1,8 +1,16 @@
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import ModalWithForm from "./ModalWithForm";
 import useForm from "../hooks/useForm";
+import CurrentUserContext from "../contexts/CurrentUserContext";
 
-function EditProfileModal({ isOpen, onClose, currentUser, onUpdateProfile }) {
+function EditProfileModal({
+  isOpen,
+  onClose,
+  onUpdateProfile,
+  isLoading = false,
+}) {
+  const currentUser = useContext(CurrentUserContext);
+
   const { values, handleChange, resetForm } = useForm({
     name: "",
     avatar: "",
@@ -15,7 +23,7 @@ function EditProfileModal({ isOpen, onClose, currentUser, onUpdateProfile }) {
         avatar: currentUser.avatar || "",
       });
     }
-  }, [currentUser, isOpen]);
+  }, [currentUser, isOpen, resetForm]);
 
   const isFormValid =
     values.name.trim() && values.avatar.trim();
@@ -23,22 +31,23 @@ function EditProfileModal({ isOpen, onClose, currentUser, onUpdateProfile }) {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    onUpdateProfile(
-      values.name,
-      values.avatar,
-      resetForm
-    );
+    if (isLoading || !isFormValid) {
+      return;
+    }
+
+    onUpdateProfile(values.name, values.avatar, resetForm);
   };
 
   return (
     <ModalWithForm
       name="edit-profile"
       title="Edit profile"
-      buttonText="Save changes"
+      buttonText={isLoading ? "Saving..." : "Save changes"}
       isOpen={isOpen}
       onClose={onClose}
       onSubmit={handleSubmit}
       isDisabled={!isFormValid}
+      isLoading={isLoading}
     >
       <label className="modal__label">
         Name

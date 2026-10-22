@@ -9,13 +9,21 @@ function ModalWithForm({
   onSubmit,
   children,
   isDisabled,
+  isLoading = false,
+  secondaryButtonText,
+  onSecondaryButtonClick,
 }) {
   return (
     <div
-      className={`modal modal_type_${name} ${isOpen ? "modal_is-opened" : ""}`}
+      className={`modal modal_type_${name || ""} ${
+        isOpen ? "modal_is-opened" : ""
+      }`}
       onClick={onClose}
     >
-      <div className="modal__content" onClick={(e) => e.stopPropagation()}>
+      <div
+        className="modal__content"
+        onClick={(e) => e.stopPropagation()}
+      >
         <button
           type="button"
           className="modal__close"
@@ -28,9 +36,26 @@ function ModalWithForm({
         <form className="modal__form" onSubmit={onSubmit}>
           {children}
 
-          <button type="submit" className="modal__submit" disabled={isDisabled}>
-            {buttonText}
-          </button>
+          <div className="modal__buttons">
+            <button
+              type="submit"
+              className="modal__submit"
+              disabled={isDisabled || isLoading}
+            >
+              {buttonText}
+            </button>
+
+            {secondaryButtonText && onSecondaryButtonClick && (
+              <button
+                type="button"
+                className="modal__secondary-button"
+                onClick={onSecondaryButtonClick}
+                disabled={isLoading}
+              >
+                {secondaryButtonText}
+              </button>
+            )}
+          </div>
         </form>
       </div>
     </div>

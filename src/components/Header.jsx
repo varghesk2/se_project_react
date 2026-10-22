@@ -10,7 +10,6 @@ function Header({
   isLoggedIn,
   onLoginClick,
   onRegisterClick,
-  onLogout,
 }) {
   const currentUser = useContext(CurrentUserContext);
 
@@ -63,14 +62,6 @@ function Header({
                 </div>
               )}
             </Link>
-
-            <button
-              className="header__logout"
-              onClick={onLogout}
-              type="button"
-            >
-              Log out
-            </button>
           </>
         ) : (
           <>

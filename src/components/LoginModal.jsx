@@ -1,7 +1,7 @@
 import ModalWithForm from "./ModalWithForm";
 import useForm from "../hooks/useForm";
 
-function LoginModal({ isOpen, onClose, onLogin }) {
+function LoginModal({ isOpen, onClose, onLogin, onSwitchModal }) {
   const { values, handleChange, resetForm } = useForm({
     email: "",
     password: "",
@@ -20,6 +20,8 @@ function LoginModal({ isOpen, onClose, onLogin }) {
       name="login"
       title="Log in"
       buttonText="Log in"
+      secondaryButtonText="or Sign up"
+      onSecondaryButtonClick={onSwitchModal}
       isOpen={isOpen}
       onClose={onClose}
       onSubmit={handleSubmit}

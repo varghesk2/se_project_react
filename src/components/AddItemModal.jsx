@@ -1,7 +1,12 @@
 import ModalWithForm from "./ModalWithForm";
 import useForm from "../hooks/useForm";
 
-function AddItemModal({ isOpen, onCloseModal, onAddItem }) {
+function AddItemModal({
+  isOpen,
+  onCloseModal,
+  onAddItem,
+  isLoading = false,
+}) {
   const { values, handleChange, resetForm } = useForm({
     name: "",
     imageUrl: "",
@@ -9,22 +14,30 @@ function AddItemModal({ isOpen, onCloseModal, onAddItem }) {
   });
 
   const isFormValid =
-    values.name.trim() && values.imageUrl.trim() && values.weather;
+    values.name.trim() &&
+    values.imageUrl.trim() &&
+    values.weather;
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (isLoading || !isFormValid) {
+      return;
+    }
 
     onAddItem(values, resetForm);
   };
 
   return (
     <ModalWithForm
+      name="add-garment"
       title="New garment"
-      buttonText="Add garment"
+      buttonText={isLoading ? "Adding..." : "Add garment"}
       isOpen={isOpen}
       onClose={onCloseModal}
       onSubmit={handleSubmit}
       isDisabled={!isFormValid}
+      isLoading={isLoading}
     >
       <label className="modal__label">
         Name
@@ -53,7 +66,9 @@ function AddItemModal({ isOpen, onCloseModal, onAddItem }) {
       </label>
 
       <fieldset className="modal__radio-buttons">
-        <legend className="modal__legend">Select the weather type:</legend>
+        <legend className="modal__legend">
+          Select the weather type:
+        </legend>
 
         <label className="modal__label_type_radio">
           <input

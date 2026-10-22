@@ -40,17 +40,30 @@ function App() {
     type: "",
   });
 
-  const [currentTemperatureUnit, setCurrentTemperatureUnit] = useState("F");
+  const [currentTemperatureUnit, setCurrentTemperatureUnit] =
+    useState("F");
   const [clothingItems, setClothingItems] = useState([]);
   const [activeModal, setActiveModal] = useState("");
   const [selectedCard, setSelectedCard] = useState(null);
   const [cardToDelete, setCardToDelete] = useState(null);
-
   const [currentUser, setCurrentUser] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleToggleSwitchChange = () => {
-    setCurrentTemperatureUnit((prev) => (prev === "F" ? "C" : "F"));
+    setCurrentTemperatureUnit((prev) =>
+      prev === "F" ? "C" : "F"
+    );
+  };
+
+  const closeActiveModal = () => {
+    if (isLoading) {
+      return;
+    }
+
+    setActiveModal("");
+    setSelectedCard(null);
+    setCardToDelete(null);
   };
 
   useEffect(() => {
@@ -93,31 +106,52 @@ function App() {
       });
   }, []);
 
+  useEffect(() => {
+    if (!activeModal) {
+      return undefined;
+    }
+
+    const handleEsc = (e) => {
+      if (e.key === "Escape" && !isLoading) {
+        closeActiveModal();
+      }
+    };
+
+    document.addEventListener("keydown", handleEsc);
+
+    return () => {
+      document.removeEventListener("keydown", handleEsc);
+    };
+  }, [activeModal, isLoading]);
+
   const handleCardClick = (card) => {
     setSelectedCard(card);
     setActiveModal("preview");
   };
 
-  const handleCardLike = (card) => {
+  const handleCardLike = async (card) => {
+    if (!currentUser) {
+      setActiveModal("login");
+      return;
+    }
+
     const isLiked = card.likes?.some(
-      (userId) => userId === currentUser?._id
+      (userId) => userId === currentUser._id
     );
 
-    const likeRequest = isLiked
-      ? removeCardLike(card._id)
-      : addCardLike(card._id);
+    try {
+      const updatedCard = isLiked
+        ? await removeCardLike(card._id)
+        : await addCardLike(card._id);
 
-    likeRequest
-      .then((updatedCard) => {
-        setClothingItems((prevItems) =>
-          prevItems.map((item) =>
-            item._id === updatedCard._id ? updatedCard : item
-          )
-        );
-      })
-      .catch((err) => {
-        console.error("Failed to update like:", err);
-      });
+      setClothingItems((prevItems) =>
+        prevItems.map((item) =>
+          item._id === updatedCard._id ? updatedCard : item
+        )
+      );
+    } catch (err) {
+      console.error("Failed to update like:", err);
+    }
   };
 
   const handleAddClick = () => {
@@ -133,100 +167,93 @@ function App() {
     setActiveModal("edit-profile");
   };
 
-  const closeActiveModal = () => {
-    setActiveModal("");
-    setSelectedCard(null);
-    setCardToDelete(null);
-  };
-
-  useEffect(() => {
-    if (!activeModal) {
-      return undefined;
-    }
-
-    const handleEsc = (e) => {
-      if (e.key === "Escape") {
-        closeActiveModal();
-      }
-    };
-
-    document.addEventListener("keydown", handleEsc);
-
-    return () => {
-      document.removeEventListener("keydown", handleEsc);
-    };
-  }, [activeModal]);
-
-  const handleRegister = (
+  const handleRegister = async (
     name,
     avatar,
     email,
     password,
     resetForm
   ) => {
-    signup(name, avatar, email, password)
-      .then(() => signin(email, password))
-      .then((data) => {
-        localStorage.setItem("jwt", data.token);
-        return checkToken(data.token);
-      })
-      .then((user) => {
-        setCurrentUser(user);
-        setIsLoggedIn(true);
-        resetForm();
-        closeActiveModal();
-      })
-      .catch((err) => {
-        console.error("Registration failed:", err);
-      });
+    setIsLoading(true);
+
+    try {
+      await signup(name, avatar, email, password);
+
+      const data = await signin(email, password);
+      localStorage.setItem("jwt", data.token);
+
+      const user = await checkToken(data.token);
+
+      setCurrentUser(user);
+      setIsLoggedIn(true);
+      resetForm();
+      setActiveModal("");
+    } catch (err) {
+      console.error("Registration failed:", err);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const handleLogin = (email, password, resetForm) => {
-    signin(email, password)
-      .then((data) => {
-        localStorage.setItem("jwt", data.token);
-        return checkToken(data.token);
-      })
-      .then((user) => {
-        setCurrentUser(user);
-        setIsLoggedIn(true);
-        resetForm();
-        closeActiveModal();
-      })
-      .catch((err) => {
-        console.error("Login failed:", err);
-      });
+  const handleLogin = async (email, password, resetForm) => {
+    setIsLoading(true);
+
+    try {
+      const data = await signin(email, password);
+      localStorage.setItem("jwt", data.token);
+
+      const user = await checkToken(data.token);
+
+      setCurrentUser(user);
+      setIsLoggedIn(true);
+      resetForm();
+      setActiveModal("");
+    } catch (err) {
+      console.error("Login failed:", err);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleLogout = () => {
     localStorage.removeItem("jwt");
     setCurrentUser(null);
     setIsLoggedIn(false);
-    closeActiveModal();
+    setActiveModal("");
+    setSelectedCard(null);
+    setCardToDelete(null);
   };
 
-  const handleAddItem = (item, resetForm) => {
-    addItem(item)
-      .then((newItem) => {
-        setClothingItems((prev) => [newItem, ...prev]);
-        resetForm();
-        closeActiveModal();
-      })
-      .catch((err) => {
-        console.error("Failed to add item:", err);
-      });
+  const handleAddItem = async (item, resetForm) => {
+    setIsLoading(true);
+
+    try {
+      const newItem = await addItem(item);
+
+      setClothingItems((prevItems) => [newItem, ...prevItems]);
+      resetForm();
+      setActiveModal("");
+    } catch (err) {
+      console.error("Failed to add item:", err);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const handleUpdateProfile = (name, avatar, resetForm) => {
-    updateUser(name, avatar)
-      .then((updatedUser) => {
-        setCurrentUser(updatedUser);
-        resetForm();
-        closeActiveModal();
-      })
-      .catch((err) => {
-        console.error("Failed to update profile:", err);
-      });
+  const handleUpdateProfile = async (name, avatar, resetForm) => {
+    setIsLoading(true);
+
+    try {
+      const updatedUser = await updateUser(name, avatar);
+
+      setCurrentUser(updatedUser);
+      resetForm();
+      setActiveModal("");
+    } catch (err) {
+      console.error("Failed to update profile:", err);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleDeleteClick = (card) => {
@@ -239,22 +266,28 @@ function App() {
     setActiveModal("confirm-delete");
   };
 
-  const handleConfirmDelete = () => {
-    if (!cardToDelete) {
+  const handleConfirmDelete = async () => {
+    if (!cardToDelete || isLoading) {
       return;
     }
 
-    deleteItem(cardToDelete._id)
-      .then(() => {
-        setClothingItems((prevItems) =>
-          prevItems.filter((item) => item._id !== cardToDelete._id)
-        );
+    setIsLoading(true);
 
-        closeActiveModal();
-      })
-      .catch((err) => {
-        console.error("Failed to delete item:", err);
-      });
+    try {
+      await deleteItem(cardToDelete._id);
+
+      setClothingItems((prevItems) =>
+        prevItems.filter((item) => item._id !== cardToDelete._id)
+      );
+
+      setActiveModal("");
+      setSelectedCard(null);
+      setCardToDelete(null);
+    } catch (err) {
+      console.error("Failed to delete item:", err);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -273,7 +306,6 @@ function App() {
               isLoggedIn={isLoggedIn}
               onLoginClick={() => setActiveModal("login")}
               onRegisterClick={() => setActiveModal("register")}
-              onLogout={handleLogout}
             />
 
             <Routes>
@@ -298,7 +330,6 @@ function App() {
                       onCardClick={handleCardClick}
                       onCardLike={handleCardLike}
                       onAddClick={handleAddClick}
-                      currentUser={currentUser}
                       onLogout={handleLogout}
                       onEditProfile={handleEditProfile}
                     />
@@ -314,25 +345,30 @@ function App() {
             isOpen={activeModal === "register"}
             onClose={closeActiveModal}
             onRegister={handleRegister}
+            onSwitchModal={() => setActiveModal("login")}
+            isLoading={isLoading}
           />
 
           <LoginModal
             isOpen={activeModal === "login"}
             onClose={closeActiveModal}
             onLogin={handleLogin}
+            onSwitchModal={() => setActiveModal("register")}
+            isLoading={isLoading}
           />
 
           <EditProfileModal
             isOpen={activeModal === "edit-profile"}
             onClose={closeActiveModal}
-            currentUser={currentUser}
             onUpdateProfile={handleUpdateProfile}
+            isLoading={isLoading}
           />
 
           <AddItemModal
             isOpen={activeModal === "add-garment"}
             onCloseModal={closeActiveModal}
             onAddItem={handleAddItem}
+            isLoading={isLoading}
           />
 
           <ItemModal
@@ -342,11 +378,12 @@ function App() {
             onDelete={handleDeleteClick}
           />
 
-          <DeleteConfirmationModal
-            isOpen={activeModal === "confirm-delete"}
-            onClose={closeActiveModal}
-            onConfirm={handleConfirmDelete}
-          />
+        <DeleteConfirmationModal
+  isOpen={activeModal === "confirm-delete"}
+  onClose={closeActiveModal}
+  onConfirm={handleConfirmDelete}
+  isLoading={isLoading}
+/>
         </div>
       </CurrentUserContext.Provider>
     </CurrentTemperatureUnitContext.Provider>

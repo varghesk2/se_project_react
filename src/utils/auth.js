@@ -1,13 +1,6 @@
+import { handleResponse } from "./api";
+
 const baseUrl = "http://localhost:3001";
-
-const handleResponse = async (res) => {
-  if (!res.ok) {
-    const text = await res.text();
-    throw new Error(`Error ${res.status}: ${text}`);
-  }
-
-  return res.json();
-};
 
 export const signup = (name, avatar, email, password) => {
   return fetch(`${baseUrl}/signup`, {
@@ -42,7 +35,7 @@ export const checkToken = (token) => {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
-      authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${token}`,
     },
   }).then(handleResponse);
 };
