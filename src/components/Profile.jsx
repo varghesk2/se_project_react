@@ -1,3 +1,4 @@
+
 import { useContext } from "react";
 import SideBar from "./SideBar";
 import ClothesSection from "./ClothesSection";
@@ -30,7 +31,6 @@ function Profile({
           onCardClick={onCardClick}
           onCardLike={onCardLike}
           onAddClick={onAddClick}
-          currentUser={currentUser}
         />
       </div>
     </div>

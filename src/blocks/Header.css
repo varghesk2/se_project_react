@@ -87,3 +87,16 @@
 .toggle__label.active {
   color: #fff;
 }
+
+.header__auth-button {
+  background-color: transparent;
+  color: #000;
+  border: none;
+  padding: 0;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.header__auth-button:hover {
+  opacity: 0.7;
+}

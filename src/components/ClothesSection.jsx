@@ -1,3 +1,6 @@
+
+import { useContext } from "react";
+import CurrentUserContext from "../contexts/CurrentUserContext";
 import ItemCard from "./ItemCard";
 import "../blocks/ClothesSection.css";
 
@@ -6,14 +9,20 @@ function ClothesSection({
   onCardClick,
   onCardLike,
   onAddClick,
-  currentUser,
 }) {
-  const userItems = clothingItems.filter(
-    (item) => item.owner === currentUser?._id
-  );
+  const currentUser = useContext(CurrentUserContext);
+
+  const userItems = clothingItems.filter((item) => {
+    const ownerId =
+      typeof item.owner === "object" && item.owner !== null
+        ? item.owner._id
+        : item.owner;
+
+    return String(ownerId) === String(currentUser?._id);
+  });
 
   return (
-    <div className="profile__content">
+    <div className="clothes-section">
       <div className="clothes-section__header">
         <h2 className="clothes-section__title">Your items</h2>
 

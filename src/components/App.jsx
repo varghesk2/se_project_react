@@ -20,6 +20,7 @@ import CurrentUserContext from "../contexts/CurrentUserContext";
 
 import { API_KEY, coordinates } from "../utils/constants";
 import { getWeather, processWeatherData } from "../utils/weatherApi";
+
 import {
   getItems,
   addItem,
@@ -28,6 +29,7 @@ import {
   addCardLike,
   removeCardLike,
 } from "../utils/api";
+
 import { signup, signin, checkToken } from "../utils/auth";
 
 function App() {
@@ -44,11 +46,21 @@ function App() {
     useState("F");
   const [clothingItems, setClothingItems] = useState([]);
   const [activeModal, setActiveModal] = useState("");
+  useEffect(() => {
+  console.log("ACTIVE MODAL:", activeModal);
+}, [activeModal]);
   const [selectedCard, setSelectedCard] = useState(null);
   const [cardToDelete, setCardToDelete] = useState(null);
   const [currentUser, setCurrentUser] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if (currentUser?._id) {
+      console.log("LOGGED-IN USER:", currentUser);
+      console.log("LOGGED-IN USER ID:", currentUser._id);
+    }
+  }, [currentUser]);
 
   const handleToggleSwitchChange = () => {
     setCurrentTemperatureUnit((prev) =>
@@ -66,29 +78,12 @@ function App() {
     setCardToDelete(null);
   };
 
-  useEffect(() => {
-    const token = localStorage.getItem("jwt");
-
-    if (!token) {
-      return;
-    }
-
-    checkToken(token)
-      .then((user) => {
-        setCurrentUser(user);
-        setIsLoggedIn(true);
-      })
-      .catch((err) => {
-        console.error("Token validation failed:", err);
-        localStorage.removeItem("jwt");
-        setCurrentUser(null);
-        setIsLoggedIn(false);
-      });
-  }, []);
-
+  // Load clothing items once when the app starts.
   useEffect(() => {
     getItems()
       .then((items) => {
+        console.log("ALL CLOTHING ITEMS:", items);
+        console.log("TOTAL ITEMS:", items.length);
         setClothingItems(items);
       })
       .catch((err) => {
@@ -96,6 +91,7 @@ function App() {
       });
   }, []);
 
+  // Load weather data.
   useEffect(() => {
     getWeather(coordinates, API_KEY)
       .then((data) => {
@@ -106,6 +102,7 @@ function App() {
       });
   }, []);
 
+  // Close the active modal when Escape is pressed.
   useEffect(() => {
     if (!activeModal) {
       return undefined;
@@ -154,14 +151,18 @@ function App() {
     }
   };
 
-  const handleAddClick = () => {
-    if (!isLoggedIn) {
-      setActiveModal("login");
-      return;
-    }
+const handleAddClick = () => {
+  console.log("ADD BUTTON CLICKED");
+  console.log("IS LOGGED IN:", isLoggedIn);
+  console.log("CURRENT USER:", currentUser);
 
-    setActiveModal("add-garment");
-  };
+  if (!isLoggedIn) {
+    setActiveModal("login");
+    return;
+  }
+
+  setActiveModal("add-garment");
+};
 
   const handleEditProfile = () => {
     setActiveModal("edit-profile");
@@ -378,12 +379,12 @@ function App() {
             onDelete={handleDeleteClick}
           />
 
-        <DeleteConfirmationModal
-  isOpen={activeModal === "confirm-delete"}
-  onClose={closeActiveModal}
-  onConfirm={handleConfirmDelete}
-  isLoading={isLoading}
-/>
+          <DeleteConfirmationModal
+            isOpen={activeModal === "confirm-delete"}
+            onClose={closeActiveModal}
+            onConfirm={handleConfirmDelete}
+            isLoading={isLoading}
+          />
         </div>
       </CurrentUserContext.Provider>
     </CurrentTemperatureUnitContext.Provider>

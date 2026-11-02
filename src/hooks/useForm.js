@@ -1,20 +1,25 @@
-import { useState } from "react";
+import { useState, useRef, useCallback } from "react";
 
 function useForm(initialValues = {}) {
-  const [values, setValues] = useState(initialValues);
+  const initialValuesRef = useRef(initialValues);
+  const [values, setValues] = useState(() => ({
+    ...initialValues,
+  }));
 
-  const handleChange = (e) => {
-    const { name, value, type } = e.target;
+  const handleChange = useCallback((e) => {
+    const { name, value } = e.target;
 
+    setValues((previousValues) => ({
+      ...previousValues,
+      [name]: value,
+    }));
+  }, []);
+
+  const resetForm = useCallback((newValues) => {
     setValues({
-      ...values,
-      [name]: type === "radio" ? value : value,
+      ...(newValues ?? initialValuesRef.current),
     });
-  };
-
- const resetForm = (newValues = initialValues) => {
-  setValues(newValues);
-};
+  }, []);
 
   return { values, handleChange, resetForm };
 }

@@ -3,6 +3,11 @@ import ModalWithForm from "./ModalWithForm";
 import useForm from "../hooks/useForm";
 import CurrentUserContext from "../contexts/CurrentUserContext";
 
+const EMPTY_PROFILE = {
+  name: "",
+  avatar: "",
+};
+
 function EditProfileModal({
   isOpen,
   onClose,
@@ -11,22 +16,21 @@ function EditProfileModal({
 }) {
   const currentUser = useContext(CurrentUserContext);
 
-  const { values, handleChange, resetForm } = useForm({
-    name: "",
-    avatar: "",
-  });
+  const { values, handleChange, resetForm } = useForm(EMPTY_PROFILE);
 
   useEffect(() => {
-    if (currentUser && isOpen) {
+    if (isOpen && currentUser) {
       resetForm({
         name: currentUser.name || "",
         avatar: currentUser.avatar || "",
       });
     }
-  }, [currentUser, isOpen, resetForm]);
+  }, [isOpen, currentUser, resetForm]);
 
   const isFormValid =
-    values.name.trim() && values.avatar.trim();
+    values.name.trim().length >= 2 &&
+    values.name.trim().length <= 30 &&
+    values.avatar.trim().length > 0;
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -35,7 +39,11 @@ function EditProfileModal({
       return;
     }
 
-    onUpdateProfile(values.name, values.avatar, resetForm);
+    onUpdateProfile(
+      values.name.trim(),
+      values.avatar.trim(),
+      resetForm
+    );
   };
 
   return (
@@ -58,8 +66,8 @@ function EditProfileModal({
           value={values.name}
           onChange={handleChange}
           placeholder="Name"
-          minLength="2"
-          maxLength="30"
+          minLength={2}
+          maxLength={30}
           required
         />
       </label>

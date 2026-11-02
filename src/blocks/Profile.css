@@ -1,16 +1,31 @@
-.profile {
+\.profile {
   display: flex;
+  align-items: flex-start;
   gap: 40px;
   width: 100%;
+  box-sizing: border-box;
   padding: 20px 0;
 }
 
 .profile__sidebar {
-  width: 250px;
-  flex-shrink: 0;
+  width: 200px;
+  flex: 0 0 200px;
+  min-width: 0;
 }
 
 .profile__content {
   flex: 1;
- min-width: 0;
+  min-width: 0;
+}
+
+@media screen and (max-width: 700px) {
+  .profile {
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  .profile__sidebar {
+    width: 100%;
+    flex: 0 0 auto;
+  }
 }

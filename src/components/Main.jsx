@@ -1,3 +1,4 @@
+
 import { useContext } from "react";
 import CurrentTemperatureUnitContext from "../contexts/CurrentTemperatureUnitContext";
 import WeatherCard from "./WeatherCard";
@@ -14,9 +15,14 @@ function Main({
     CurrentTemperatureUnitContext
   );
 
-  const filteredItems = clothingItems.filter(
-    (item) => item.weather === weatherData.type
-  );
+  const currentWeather = weatherData?.type?.trim().toLowerCase();
+
+  const filteredItems = currentWeather
+    ? clothingItems.filter(
+        (item) =>
+          item.weather?.trim().toLowerCase() === currentWeather
+      )
+    : clothingItems;
 
   return (
     <main className="main">
@@ -24,19 +30,25 @@ function Main({
 
       <p className="main__description">
         Today is{" "}
-        {weatherData.temperature?.[currentTemperatureUnit]}°
+        {weatherData.temperature?.[currentTemperatureUnit] ?? "--"}°
         {currentTemperatureUnit} / You may want to wear:
       </p>
 
       <section className="cards">
-        {filteredItems.map((item) => (
-          <ItemCard
-            key={item._id}
-            item={item}
-            onCardClick={onCardClick}
-            onCardLike={onCardLike}
-          />
-        ))}
+        {filteredItems.length > 0 ? (
+          filteredItems.map((item) => (
+            <ItemCard
+              key={item._id}
+              item={item}
+              onCardClick={onCardClick}
+              onCardLike={onCardLike}
+            />
+          ))
+        ) : (
+          <p className="main__empty-message">
+            No clothing items match today's weather yet.
+          </p>
+        )}
       </section>
     </main>
   );
